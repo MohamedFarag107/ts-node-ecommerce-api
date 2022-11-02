@@ -6,7 +6,7 @@ import Category from "../models/categoryModel";
 
 // @description: Create Category
 // @route: POST => /api/v1/categories
-// access: Private
+// @access: Private
 interface IBody {
   name: string;
 }
@@ -24,7 +24,7 @@ export const createCategory = expressAsyncHandler(
 
 // @description: Get All Categories
 // @route: GET => /api/v1/categories?page=<number>&limit=<number>
-// access: Public
+// @access: Public
 interface IQuery {
   page: number;
   limit: number;
@@ -45,7 +45,7 @@ export const getAllCategories = expressAsyncHandler(
 
 // @description: Get Specific Category
 // @route: GET => /api/v1/categories/:id
-// access: Public
+// @access: Public
 interface IParams {
   id: Types.ObjectId;
 }
@@ -69,7 +69,7 @@ export const getSpecificCategory = expressAsyncHandler(
 
 // @description: Update Specific Category
 // @route: PUT => /api/v1/categories/:id
-// access: Private
+// @access: Private
 
 export const updateSpecificCategory = expressAsyncHandler(
   async (
@@ -102,7 +102,7 @@ export const updateSpecificCategory = expressAsyncHandler(
 
 // @description: Delete Specific Category
 // @route: DELETE => /api/v1/categories/:id
-// access: Private
+// @access: Private
 
 export const deleteSpecificCategory = expressAsyncHandler(
   async (req: Request<IParams, {}, {}, {}>, res: Response): Promise<void> => {
