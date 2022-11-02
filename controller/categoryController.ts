@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import expressAsyncHandler from "express-async-handler";
 import { Types } from "mongoose";
 import slugify from "slugify";
@@ -51,7 +51,7 @@ interface IParams {
 }
 
 export const getSpecificCategory = expressAsyncHandler(
-  async (req: Request<IParams, {}, {}, {}>, res: Response): Promise<void> => {
+  async (req: Request<IParams, {}, {}, {}>, res: Response,next:NextFunction): Promise<void> => {
     // const id: Types.ObjectId = req.params.id;
     const id: Types.ObjectId = req.params.id;
     const document = await Category.findById(id);
@@ -59,6 +59,7 @@ export const getSpecificCategory = expressAsyncHandler(
       res.status(404).json({
         data: "No Category For this id " + id,
       });
+      // next()
     }
     res.json({
       data: document,
