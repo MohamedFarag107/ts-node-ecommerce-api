@@ -3,7 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 import { Types } from "mongoose";
 import slugify from "slugify";
 import Category from "../models/categoryModel";
-
+import ApiError from "../utils/apiError";
 // @description: Create Category
 // @route: POST => /api/v1/categories
 // @access: Private
@@ -51,15 +51,16 @@ interface IParams {
 }
 
 export const getSpecificCategory = expressAsyncHandler(
-  async (req: Request<IParams, {}, {}, {}>, res: Response,next:NextFunction): Promise<void> => {
+  async (
+    req: Request<IParams, {}, {}, {}>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     // const id: Types.ObjectId = req.params.id;
     const id: Types.ObjectId = req.params.id;
     const document = await Category.findById(id);
     if (!document) {
-      res.status(404).json({
-        data: "No Category For this id " + id,
-      });
-      // next()
+      return next(new ApiError(`No Category For this id ${id}`, 404));
     }
     res.json({
       data: document,
@@ -74,7 +75,8 @@ export const getSpecificCategory = expressAsyncHandler(
 export const updateSpecificCategory = expressAsyncHandler(
   async (
     req: Request<IParams, {}, IBody, {}>,
-    res: Response
+    res: Response,
+    next: NextFunction
   ): Promise<void> => {
     const name: string = req.body.name;
     const id: Types.ObjectId = req.params.id;
@@ -90,9 +92,7 @@ export const updateSpecificCategory = expressAsyncHandler(
       }
     );
     if (!document) {
-      res.status(404).json({
-        data: `No Category For this id <${id}>`,
-      });
+      return next(new ApiError(`No Category For this id ${id}`, 404));
     }
     res.json({
       data: document,
@@ -105,13 +105,15 @@ export const updateSpecificCategory = expressAsyncHandler(
 // @access: Private
 
 export const deleteSpecificCategory = expressAsyncHandler(
-  async (req: Request<IParams, {}, {}, {}>, res: Response): Promise<void> => {
+  async (
+    req: Request<IParams, {}, {}, {}>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     const id: Types.ObjectId = req.params.id;
     const document = await Category.findByIdAndDelete(id);
     if (!document) {
-      res.status(404).json({
-        data: `No Category For this id <${id}>`,
-      });
+      return next(new ApiError(`No Category For this id ${id}`, 404));
     }
     // code for delete
     res.status(204).send();
